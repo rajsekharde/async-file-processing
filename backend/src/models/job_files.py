@@ -1,4 +1,4 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
 import sqlalchemy as sa
 from enum import Enum
@@ -27,3 +27,6 @@ class JobFile(SQLModel, table=True):
     storage_path: str = Field(sa_type=sa.String)
 
     created_at: datetime = Field(default_factory=now_utc)
+
+
+    job: Job = Relationship(back_populates="job_files")

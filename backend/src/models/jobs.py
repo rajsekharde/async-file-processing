@@ -1,11 +1,20 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
 from uuid import UUID, uuid4
 from enum import Enum
 import sqlalchemy as sa
 from datetime import datetime, timezone
 from sqlalchemy.types import JSON
+from job_files import JobFile
+from dotenv import load_dotenv
+import os
 
+
+load_dotenv()
+
+token_expire_days = int(os.getenv("JOB_TOKEN_EXPIRE_DAYS"))
+
+print(token_expire_days)
 
 class JobStatus(str, Enum):
     QUEUED = "QUEUED"
@@ -42,3 +51,6 @@ class Job(SQLModel, table=True):
         default_factory=now_utc,
         sa_column=sa.Column(sa.DateTime, default=now_utc, onupdate=now_utc)
         )
+    
+
+    job_files: list["JobFile"] = Relationship(back_populates="job")
