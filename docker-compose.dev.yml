@@ -10,7 +10,7 @@ services:
       - ENV=development
     volumes:
       - ./backend/src:/code/src
-      - ./alembic/versions:/code/alembic/versions
+      - ./backend/alembic/versions:/code/alembic/versions
     networks:
       - app-network
     env_file:
