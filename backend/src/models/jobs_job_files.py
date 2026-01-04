@@ -38,9 +38,9 @@ class Job(SQLModel, table=True):
 
     job_id: UUID = Field(default_factory=uuid4, primary_key=True)
 
-    job_token_hash: str = Field(sa_type=sa.String)
+    session_id: str = Field(sa_type=sa.String)
 
-    job_token_expires_at: datetime = Field(default_factory=token_expires_at)
+    session_id_expires_at: datetime = Field(default_factory=token_expires_at)
 
     operation_type: str = Field(sa_type=sa.String)
 
