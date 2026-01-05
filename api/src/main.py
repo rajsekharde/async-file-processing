@@ -34,4 +34,4 @@ def accept_job(Job: JobCreate):
 @app.post("/test")
 def test_conn(data: TestText):
     r.lpush("test", data.text)
-    return {"Messsage": "Posted"}
+    return {"Messsage": f"Posted: {data.text}"}
