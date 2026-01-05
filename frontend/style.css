@@ -1,0 +1,9 @@
+#appTitle{
+    text-align: center;
+}
+
+#testDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
