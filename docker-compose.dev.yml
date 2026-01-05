@@ -1,6 +1,7 @@
 services:
   api:
     container_name: api
+    restart: unless-stopped
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -24,6 +25,7 @@ services:
   redis:
     image: redis:7
     container_name: redis
+    restart: unless-stopped
     ports:
       - "6379:6379"
     networks:
@@ -37,6 +39,7 @@ services:
   
   worker:
     container_name: worker
+    restart: unless-stopped
     build: ./worker
     networks:
       - app-network
@@ -47,6 +50,7 @@ services:
   database:
     image: postgres:15
     container_name: postgres_db
+    restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
