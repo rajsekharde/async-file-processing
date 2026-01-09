@@ -8,8 +8,6 @@ QUEUE_NAME = "jobs"
 
 while True:
     print("Worker waiting for job...")
-    #queue_name, job_id = r.brpop(QUEUE_NAME)
-    #print(f"Worker received job_id: {job_id}")
 
-    queue_name, text = r.brpop("test")
-    print(f"Worker received text: {text}")
+    queue_name, job_id = r.brpop(QUEUE_NAME)
+    print(f"Worker received job_id: {job_id}")

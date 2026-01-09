@@ -12,6 +12,7 @@ services:
     volumes:
       - ./api/src:/code/src
       - ./api/alembic/versions:/code/alembic/versions
+      - ./file-storage:/data
     networks:
       - app-network
     env_file:
@@ -43,6 +44,8 @@ services:
     build: ./worker
     networks:
       - app-network
+    volumes:
+      - ./file-storage:/data
     depends_on:
       redis:
         condition: service_healthy
