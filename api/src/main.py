@@ -1,8 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from src.api_schemas.schemas import JobCreate, TestText
 import uuid
 import redis
+import shutil
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
 
 r = redis.Redis(host="redis", port=6379, decode_responses=True)
 
@@ -25,13 +27,31 @@ def root_check():
 def health_check():
     return {"Message": "Backend is running"}
 
-@app.post("/jobs")
-def accept_job(Job: JobCreate):
-    job_id = str(uuid.uuid4())
-    r.lpush("jobs", job_id)
-    return job_id
 
-@app.post("/test")
-def test_conn(data: TestText):
-    r.lpush("test", data.text)
-    return {"Messsage": f"Posted: {data.text}"}
+BASE_DIR = Path("/data")
+UPLOADS = BASE_DIR / "uploads"
+RESULTS = BASE_DIR / "results"
+
+
+@app.post("/upload")
+async def upload_files(file : UploadFile = File(...)):
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No Filename")
+    
+    job_id = str(uuid.uuid4())
+    job_upload_dir = UPLOADS / job_id
+    job_upload_dir.mkdir(parents=True, exist_ok=True)
+
+    safe_name = f"{uuid.uuid4()}_{Path(file.filename).name}"
+    dest = job_upload_dir / safe_name
+
+    with dest.open("wb") as f:
+        shutil.copyfileobj(file.file, f)
+    
+    r.lpush("jobs", job_id)
+
+    return {
+        "Job Id": job_id,
+        "File Name": safe_name
+    }
+
