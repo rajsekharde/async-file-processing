@@ -2,16 +2,14 @@
 
 ## Architecture Diagram
 
-![Architecture Diagram](media/architecture_diagram.png)
+![Architecture Diagram](media/architecture-diagram.png)
 
 ## Tech Stack
 
-- **Traefik**: Routing, Automatic HTTPS, Static frontend hosting
+- **Traefik**: Routing, Automatic HTTPS
 - **FastAPI**: Backend APIs
 - **Redis**: Job Queue
 - **PostgreSQL**: Job/File Metadata
-- **Worker**: Python
-- **AWS S3**: File Storage
 - **Docker, Docker compose**: Containerization
 
 ## Project Structure
@@ -21,7 +19,6 @@ async-file-processing
 ├── api
 │   ├── alembic
 │   │   ├── env.py
-│   │   ├── README
 │   │   └── versions
 │   ├── alembic.ini
 │   ├── Dockerfile
@@ -30,20 +27,24 @@ async-file-processing
 │       ├── api_schemas
 │       │   └── schemas.py
 │       ├── database
-│       │   ├── engine.py
+│       │   ├── engine.py
 │       │   └── session.py
 │       ├── main.py
 │       └── models
 │           └── jobs_job_files.py
-├── worker
+│── worker
 │   ├── Dockerfile
 │   ├── requirements.txt
 │   └── src
 │       └── worker.py
-├── file-storage
+├── frontend
+│   ├── Dockerfile
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
 ├── media
-│   └── architecture_diagram.png
-├── docker-compose.dev.yml
+├── file-storage
+├── docker-compose.yml
 └── README.md
 ```
 
@@ -70,7 +71,6 @@ POSTGRES_DB=db
 DB_HOST=database
 DB_PORT=5432
 
-
 JOB_TOKEN_EXPIRE_DAYS=7
 ```
 
@@ -78,7 +78,7 @@ Build and run the containers using docker compose:
 
 ```bash
 docker compose up --build -d
-docker ps # To inspect running containers
+docker ps # Inspect running containers
 ```
 
 Run alembic migrations inside docker to initialize database:
@@ -100,5 +100,5 @@ docker exec -it postgres-f psql -U username -d db
 Shut down the containers:
 
 ```bash
-docker compose -f docker-compose.dev.yml down
+docker compose down
 ```
