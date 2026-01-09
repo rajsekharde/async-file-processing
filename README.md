@@ -40,6 +40,7 @@ async-file-processing
 │   ├── requirements.txt
 │   └── src
 │       └── worker.py
+├── file-storage
 ├── media
 │   └── architecture_diagram.png
 ├── docker-compose.dev.yml
@@ -76,20 +77,20 @@ JOB_TOKEN_EXPIRE_DAYS=7
 Build and run the containers using docker compose:
 
 ```bash
-docker compose -f docker-compose.dev.yml up --build -d
+docker compose up --build -d
 docker ps # To inspect running containers
 ```
 
 Run alembic migrations inside docker to initialize database:
 
 ```bash
-docker exec -it api alembic upgrade head
+docker exec -it api-f alembic upgrade head
 ```
 
 Inspect the database using psql:
 
 ```bash
-docker exec -it postgres_db psql -U username -d db
+docker exec -it postgres-f psql -U username -d db
 
 \dt # List tables
 \d jobs # Check columns of jobs table
